@@ -1,14 +1,13 @@
 /*
-	Based on the Public Domain MaxRectsBinPack.cpp source by Jukka Jyl鋘ki
 	https://github.com/juj/RectangleBinPack/
-
-	Ported to C# by Sven Magnus
-	This version is also public domain - do whatever you want with it.
+	用于将多个长宽不一的二维对象以最有效的方式合并到一个二维对象中。简称二维装箱
 */
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
+//纹理贴图打包类
 public class UITexturePacker
 {
 	public int binWidth = 0;

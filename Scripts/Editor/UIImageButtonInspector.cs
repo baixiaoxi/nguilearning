@@ -1,6 +1,5 @@
 //----------------------------------------------
-//            NGUI: Next-Gen UI kit
-// Copyright © 2011-2013 Tasharen Entertainment
+// 2013-5-25
 //----------------------------------------------
 
 using UnityEngine;
@@ -11,7 +10,10 @@ using System.Collections.Generic;
 /// Inspector class used to edit UISprites.
 /// </summary>
 
+//¶¨ÒåÄÄÄÄÖÖ¶ÔÏó¿ÉÒÔ±»ÓÃ»§Editor classËù±à¼­
 [CustomEditor(typeof(UIImageButton))]
+
+//¼Ì³Ğ×ÔEditor£¬EditorGUIºÍEditorGUILayout¿ÉÓÃÓÚ´´½¨±à¼­Æ÷¿Ø¼ş
 public class UIImageButtonInspector : Editor
 {
 	UIImageButton mButton;
@@ -20,7 +22,8 @@ public class UIImageButtonInspector : Editor
 	/// <summary>
 	/// Atlas selection callback.
 	/// </summary>
-
+	
+	//µ±Ñ¡ÔñĞÂµÄatlasÌùÍ¼¼¯Ê±µÄ»Øµ÷º¯Êı
 	void OnSelectAtlas (MonoBehaviour obj)
 	{
 		if (mButton.target != null)
@@ -31,12 +34,17 @@ public class UIImageButtonInspector : Editor
 		}
 	}
 
+	//º¯Êı×ÔEditor£¬ÓÃÓÚ»æÖÆ×Ô¶¨µÄinspector¡£×¢Òâ£¬Õâ¸öº¯ÊıÖ»ÓĞÔÚ³¡¾°ÖĞÑ¡ÔñÁË¶ÔÏó»ò¶¼ÔÚ¼ìÊÓÃæ°åÖĞÓĞµ¥»÷»ò°´Å¥Ê±²Å»á±»Ö´ĞĞ£¬ÇÒÖ´ĞĞ´ÎÊıÍùÍù»áÓĞÈıËÄ´Î¡£
 	public override void OnInspectorGUI ()
 	{
+		//EditorGUIUtilityÀàÖĞÓÃÓÚÉè¶¨Editor µÄÄ¬ÈÏÍâ¹ÛÑùÊ½£¬ÕâÀïÊÇ°Ñ±êÇ©(label)µÄ¿í¶ÈÉèÎª80f
 		EditorGUIUtility.LookLikeControls(80f);
+		//targetÊÇEditorÖĞµÄ³ÉÔ±±äÁ¿£¬Ö¸ÏòµÄÊÇµ±Ç°³¡¾°ÖĞ±»Ñ¡ÖĞµÄ¶ÔÏó
 		mButton = target as UIImageButton;
+		//ÔÚ¼ìÊÓÃæ°åÖĞ´´½¨Ò»¸ö¶ÔÏóÓò£¬¿ÉÍ¨¹ıÍÏ×§µÈ·½Ê½½øĞĞ¸³Öµ
 		mSprite = EditorGUILayout.ObjectField("Sprite", mButton.target, typeof(UISprite), true) as UISprite;
-
+		
+		//µ±SpriteÓòÖĞµÄÖµÓëµ±Ç°buttonÖĞµÄtarget²»Ò»ÖµÊ±£¬ÉèÖÃ
 		if (mButton.target != mSprite)
 		{
 			NGUIEditorTools.RegisterUndo("Image Button Change", mButton);
@@ -46,12 +54,14 @@ public class UIImageButtonInspector : Editor
 
 		if (mSprite != null)
 		{
+			//ÓÉÓÚEditorGUILayout.ObjectField ²»Ö§³Ö×Ô¶¨Òå×é¼ş(components), ´Ëº¯Êı×Ô¶¨ÒåÁË¶ÔÏóÓò£¬µ«ÊÇ½öÖ§³Ö´ÓÀúÊ·¼ÇÂ¼ÖĞÑ¡Ôñ
 			ComponentSelector.Draw<UIAtlas>(mSprite.atlas, OnSelectAtlas);
-
+			
+			//´´½¨Èı¸öspriteÓò£¬²¢·ÖÅä»Øµ÷º¯Êı
 			if (mSprite.atlas != null)
 			{
-				NGUIEditorTools.SpriteField("Normal", mSprite.atlas, mButton.normalSprite, OnNormal);
-				NGUIEditorTools.SpriteField("Hover", mSprite.atlas, mButton.hoverSprite, OnHover);
+				NGUIEditorTools.SpriteField("Normal" , mSprite.atlas, mButton.normalSprite, OnNormal);
+				NGUIEditorTools.SpriteField("Hover"  , mSprite.atlas, mButton.hoverSprite, OnHover);
 				NGUIEditorTools.SpriteField("Pressed", mSprite.atlas, mButton.pressedSprite, OnPressed);
 			}
 		}
@@ -63,7 +73,8 @@ public class UIImageButtonInspector : Editor
 		mButton.normalSprite = spriteName;
 		mSprite.spriteName = spriteName;
 		mSprite.MakePixelPerfect();
-		if (mButton.collider == null || (mButton.collider is BoxCollider)) NGUITools.AddWidgetCollider(mButton.gameObject);
+		if (mButton.collider == null || (mButton.collider is BoxCollider)) NGUITools.AddWidgetCollider(mButton.gameObject)
+		//Repaint any inspectors that shows this editor
 		Repaint();
 	}
 

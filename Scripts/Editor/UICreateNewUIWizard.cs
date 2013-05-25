@@ -1,3 +1,7 @@
+//----------------------------------------------
+// 2013-5-25
+//----------------------------------------------
+
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
@@ -8,6 +12,7 @@ using System.Collections.Generic;
 
 public class UICreateNewUIWizard : EditorWindow
 {
+	//相机类型
 	public enum CameraType
 	{
 		None,
@@ -41,6 +46,7 @@ public class UICreateNewUIWizard : EditorWindow
 		GUILayout.EndHorizontal();
 
 		GUILayout.BeginHorizontal();
+		//Make an enum popup selection field.
 		camType = (CameraType)EditorGUILayout.EnumPopup("Camera", camType, GUILayout.Width(200f));
 		GUILayout.Space(20f);
 		GUILayout.Label("Should this UI have a camera?");
@@ -51,7 +57,8 @@ public class UICreateNewUIWizard : EditorWindow
 		EditorGUILayout.PrefixLabel("When ready,");
 		bool create = GUILayout.Button("Create Your UI", GUILayout.Width(120f));
 		GUILayout.EndHorizontal();
-
+		
+		//如果点击了Create Your UI，那么调用CreateNewUI去创建一个包含camera,plane,等子对象的复合对象。
 		if (create) CreateNewUI();
 	}
 
@@ -74,6 +81,7 @@ public class UICreateNewUIWizard : EditorWindow
 		else
 		{
 			root = new GameObject((camType == CameraType.Advanced3D) ? "UI Root (3D)" : "UI Root");
+			//设置localScale的默认初值
 			root.transform.localScale = new Vector3(0.0025f, 0.0025f, 0.0025f);
 			root.AddComponent<UIRoot>().scalingStyle = UIRoot.Scaling.FixedSize;
 		}
@@ -86,6 +94,7 @@ public class UICreateNewUIWizard : EditorWindow
 		{
 			// No camera requested -- simply add a panel
 			UIPanel panel = NGUITools.AddChild<UIPanel>(root.gameObject);
+			//聚集panel对象
 			Selection.activeGameObject = panel.gameObject;
 		}
 		else
@@ -110,7 +119,7 @@ public class UICreateNewUIWizard : EditorWindow
 				// 只要有一台摄像机处于有效状态，那么clearColor=false;
 				if (c.enabled && NGUITools.GetActive(c.gameObject)) clearColor = false;
 
-				// If this camera has an audio listener, we won't need to add one
+				// If this camera has an audio listener, we won't need to add one只要有一台像机有音源侦听器，那么便不用添加。
 				if (c.GetComponent<AudioListener>() != null) audioListener = false;
 			}
 
@@ -134,7 +143,8 @@ public class UICreateNewUIWizard : EditorWindow
 				cam.transform.localPosition = new Vector3(0f, 0f, -700f);
 			}
 
-			// We don't want to clear color if this is not the first camera
+			// We don't want to clear color if this is not the first camera。
+			//如果当前待添加的相机是场景中唯一的相机，那么默认使用天空色，否则使用原有相机的设置。但是呢，如果没有建立skybox，则是用背景色填充
 			if (cameras.Count > 0) cam.clearFlags = clearColor ? CameraClearFlags.Skybox : CameraClearFlags.Depth;
 
 			// Add an audio listener if we need one
@@ -151,7 +161,7 @@ public class UICreateNewUIWizard : EditorWindow
 
 				// And finally -- the first UI panel
 				UIPanel panel = NGUITools.AddChild<UIPanel>(anchor.gameObject);
-				Selection.activeGameObject = panel.gameObject;
+				Selection.activeGameObject = panel.gameObject;//聚集至panel对象
 			}
 			else
 			{
